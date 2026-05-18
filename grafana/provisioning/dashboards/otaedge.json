@@ -1,0 +1,56 @@
+{
+  "dashboard": {
+    "title": "OTAedge Device Monitoring",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Active WebSocket Connections",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "ws_connections_active",
+            "legendFormat": "Connections"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Device CPU Usage",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "device_cpu_usage_percent",
+            "legendFormat": "{{device_id}}"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Device Memory Usage",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "device_memory_used_bytes",
+            "legendFormat": "{{device_id}} Used"
+          },
+          {
+            "expr": "device_memory_total_bytes",
+            "legendFormat": "{{device_id}} Total"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Deployments by Status",
+        "type": "barchart",
+        "targets": [
+          {
+            "expr": "deployments_total",
+            "legendFormat": "{{status}}"
+          }
+        ]
+      }
+    ]
+  },
+  "overwrite": true
+}

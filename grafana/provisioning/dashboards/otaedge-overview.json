@@ -1,0 +1,140 @@
+{
+  "apiVersion": 1,
+  "providers": [
+    {
+      "name": "OTAedge Dashboards",
+      "orgId": 1,
+      "folder": "OTAedge",
+      "type": "file",
+      "disableDeletion": false,
+      "editable": true,
+      "options": {
+        "path": "/etc/grafana/provisioning/dashboards"
+      }
+    }
+  ],
+  "dashboards": {
+    "otaedge-overview": {
+      "id": null,
+      "uid": "otaedge-overview",
+      "title": "OTAedge Overview",
+      "tags": ["otaedge"],
+      "style": "dark",
+      "timezone": "browser",
+      "schemaVersion": 36,
+      "refresh": "10s",
+      "time": {
+        "from": "now-5m",
+        "to": "now"
+      },
+      "panels": [
+        {
+          "id": 1,
+          "title": "HTTP Request Rate",
+          "type": "graph",
+          "targets": [
+            {
+              "expr": "rate(http_requests_total[5m])",
+              "legendFormat": "{{method}} {{path}} {{status}}",
+              "refId": "A"
+            }
+          ],
+          "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 }
+        },
+        {
+          "id": 2,
+          "title": "Active WebSocket Connections",
+          "type": "gauge",
+          "targets": [
+            {
+              "expr": "ws_connections_active",
+              "legendFormat": "connections",
+              "refId": "A"
+            }
+          ],
+          "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+          "options": {
+            "reduceOptions": {
+              "values": false,
+              "calcs": ["lastNotNull"],
+              "fields": ""
+            },
+            "orientation": "auto",
+            "textMode": "value",
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "red", "value": 80 }
+                ]
+              },
+              "unit": "short"
+            }
+          }
+        },
+        {
+          "id": 3,
+          "title": "Deployments by Status",
+          "type": "barchart",
+          "targets": [
+            {
+              "expr": "increase(deployments_total[5m])",
+              "legendFormat": "{{status}}",
+              "refId": "A"
+            }
+          ],
+          "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+          "options": {
+            "orientation": "horizontal",
+            "legend": { "displayMode": "list", "placement": "bottom" }
+          }
+        },
+        {
+          "id": 4,
+          "title": "HTTP Requests Total",
+          "type": "stat",
+          "targets": [
+            {
+              "expr": "sum(http_requests_total)",
+              "legendFormat": "total",
+              "refId": "A"
+            }
+          ],
+          "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+          "options": {
+            "reduceOptions": {
+              "values": false,
+              "calcs": ["lastNotNull"],
+              "fields": ""
+            },
+            "orientation": "auto",
+            "textMode": "value",
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 1000 },
+                  { "color": "red", "value": 10000 }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
