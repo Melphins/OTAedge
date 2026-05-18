@@ -1319,11 +1319,11 @@ impl Repository {
             action: row.action,
             resource_type: row.resource_type,
             resource_id: row.resource_id,
-            old_state: row.old_state.map(|s| sqlx::types::Json(s)),
-            new_state: row.new_state.map(|s| sqlx::types::Json(s)),
+            old_state: row.old_state.map(sqlx::types::Json),
+            new_state: row.new_state.map(sqlx::types::Json),
             ip_address: row.ip_address,
             user_agent: row.user_agent,
-            metadata: row.metadata.map(|m| sqlx::types::Json(m)),
+            metadata: row.metadata.map(sqlx::types::Json),
             created_at: row.created_at.expect("created_at should not be null"),
         })
     }
@@ -1462,7 +1462,7 @@ impl Repository {
             acknowledged_at: row.acknowledged_at,
             acknowledged_by: row.acknowledged_by,
             silenced_until: row.silenced_until,
-            metadata: row.metadata.map(|m| sqlx::types::Json(m)),
+            metadata: row.metadata.map(sqlx::types::Json),
             created_at: row.created_at,
         })
     }
@@ -1514,7 +1514,7 @@ impl Repository {
                 acknowledged_at: r.acknowledged_at,
                 acknowledged_by: r.acknowledged_by,
                 silenced_until: r.silenced_until,
-                metadata: r.metadata.map(|m| sqlx::types::Json(m)),
+                metadata: r.metadata.map(sqlx::types::Json),
                 created_at: r.created_at,
             })
             .collect())

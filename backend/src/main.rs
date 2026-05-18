@@ -1774,7 +1774,7 @@ async fn create_deployment(
     };
 
     if target_device_ids.is_empty() {
-        log_ctx.error(&format!("No devices found for deployment"));
+        log_ctx.error("No devices found for deployment");
         return Err(AppError::Validation("No devices found".to_string()));
     }
 
