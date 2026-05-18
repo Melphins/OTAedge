@@ -1370,7 +1370,6 @@ impl Repository {
         }
         if end_date.is_some() {
             conditions.push(format!("created_at <= ${}", param_count));
-            param_count += 1;
         }
 
         let where_clause = if conditions.is_empty() {

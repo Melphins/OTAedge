@@ -1,0 +1,110 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM deployments WHERE status = 'pending' ORDER BY created_at ASC",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "device_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "model_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 3,
+        "name": "status",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "rollout_strategy",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "rollout_percentage",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
+        "name": "deployed_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 7,
+        "name": "completed_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 8,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 9,
+        "name": "current_phase",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 10,
+        "name": "devices_target",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 11,
+        "name": "devices_deployed",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 12,
+        "name": "devices_succeeded",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 13,
+        "name": "devices_failed",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 14,
+        "name": "rollout_config",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 15,
+        "name": "rollback_of",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "fc6afd224daaa7e15e710bccbcdb0baa4a9e21e3304315a4c3bbc9fb31a43433"
+}

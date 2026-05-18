@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT COUNT(*) as count FROM deployment_devices WHERE deployment_id = $1 AND phase = $2 AND status IN ('succeeded','failed')",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "count",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "e8037a9711d1031eaa0adc32a8b5ce82eff8adfe34c1060b381cb5a6ed1f8f91"
+}

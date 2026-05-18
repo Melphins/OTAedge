@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE deployments\n                                 SET devices_deployed = devices_deployed + 1\n                                 WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "7e0c9bc161e9c7c986478bb04aca5df0db00d6afc5c1787acfd533072d001670"
+}

@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            UPDATE deployment_devices\n            SET status = $1, started_at = $2, completed_at = $3, error_message = $4\n            WHERE deployment_id = $5 AND device_id = $6\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Timestamptz",
+        "Timestamptz",
+        "Text",
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b2797dec5bc995049b0988bdefbdf5ec29b1946a147842994f811c9fc14ff0c9"
+}

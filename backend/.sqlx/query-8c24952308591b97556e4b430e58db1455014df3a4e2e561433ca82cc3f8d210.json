@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            SELECT\n                d.device_id as device_id_str,\n                d.name as device_name,\n                dd.status,\n                dd.phase,\n                dd.previous_model_id,\n                dd.current_model_id\n            FROM deployment_devices dd\n            JOIN devices d ON dd.device_id = d.id\n            WHERE dd.deployment_id = $1\n            ORDER BY dd.phase, d.device_id\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "device_id_str",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "device_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "status",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "phase",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "previous_model_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 5,
+        "name": "current_model_id",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "8c24952308591b97556e4b430e58db1455014df3a4e2e561433ca82cc3f8d210"
+}
