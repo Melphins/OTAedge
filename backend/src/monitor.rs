@@ -26,13 +26,19 @@ async fn check_offline_devices(state: &Arc<AppState>) -> Result<(), Box<dyn std:
     // Check for devices that haven't sent heartbeat in 5 minutes
     let threshold_minutes = 5;
 
-    let offline_devices = state.repo.get_device_offline_candidates(threshold_minutes).await?;
+    let offline_devices = state
+        .repo
+        .get_device_offline_candidates(threshold_minutes)
+        .await?;
 
     if offline_devices.is_empty() {
         return Ok(());
     }
 
-    info!("Found {} potentially offline devices", offline_devices.len());
+    info!(
+        "Found {} potentially offline devices",
+        offline_devices.len()
+    );
 
     for device in offline_devices {
         // Skip if device is already marked as offline
@@ -51,7 +57,11 @@ async fn check_offline_devices(state: &Arc<AppState>) -> Result<(), Box<dyn std:
         );
 
         // Update device status to offline
-        if let Err(e) = state.repo.update_device_status(&device.device_id, "offline").await {
+        if let Err(e) = state
+            .repo
+            .update_device_status(&device.device_id, "offline")
+            .await
+        {
             error!(
                 "Failed to update device {} status to offline: {}",
                 device.device_id, e
@@ -91,7 +101,9 @@ pub async fn start_deployment_cleanup(state: Arc<AppState>) {
 }
 
 /// Clean up deployments that have been stuck for too long
-async fn cleanup_stuck_deployments(state: &Arc<AppState>) -> Result<(), Box<dyn std::error::Error>> {
+async fn cleanup_stuck_deployments(
+    state: &Arc<AppState>,
+) -> Result<(), Box<dyn std::error::Error>> {
     // Find deployments that have been "deploying" for more than 24 hours
     let stuck_threshold_hours = 24;
 
@@ -176,7 +188,10 @@ async fn aggregate_device_metrics(state: &Arc<AppState>) -> Result<(), Box<dyn s
                     id: Uuid::new_v4().to_string(),
                     severity: crate::alerts::AlertSeverity::Warning,
                     title: format!("High CPU Usage on Device"),
-                    description: format!("Device {} ({}) has CPU usage at {:.1}%", device_name, device_id, cpu_usage),
+                    description: format!(
+                        "Device {} ({}) has CPU usage at {:.1}%",
+                        device_name, device_id, cpu_usage
+                    ),
                     source: crate::alerts::AlertSource::Device,
                     metadata: Some(serde_json::json!({
                         "device_id": device_id,

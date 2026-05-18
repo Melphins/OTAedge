@@ -93,7 +93,10 @@ impl RbacState {
         let mut role_permissions = HashMap::new();
         role_permissions.insert("admin".to_string(), RolePermissions::admin());
         role_permissions.insert("user".to_string(), RolePermissions::user());
-        role_permissions.insert("device_operator".to_string(), RolePermissions::device_operator());
+        role_permissions.insert(
+            "device_operator".to_string(),
+            RolePermissions::device_operator(),
+        );
 
         Self {
             role_permissions: Arc::new(RwLock::new(role_permissions)),
@@ -248,12 +251,16 @@ mod tests {
     async fn test_admin_has_all_permissions() {
         let state = RbacState::new();
 
-        assert!(state
-            .check_permission("admin", ResourceType::Devices, Action::Delete)
-            .await);
-        assert!(state
-            .check_permission("admin", ResourceType::Users, Action::Delete)
-            .await);
+        assert!(
+            state
+                .check_permission("admin", ResourceType::Devices, Action::Delete)
+                .await
+        );
+        assert!(
+            state
+                .check_permission("admin", ResourceType::Users, Action::Delete)
+                .await
+        );
     }
 
     #[tokio::test]
@@ -261,19 +268,25 @@ mod tests {
         let state = RbacState::new();
 
         // User can read devices
-        assert!(state
-            .check_permission("user", ResourceType::Devices, Action::Read)
-            .await);
+        assert!(
+            state
+                .check_permission("user", ResourceType::Devices, Action::Read)
+                .await
+        );
 
         // User cannot delete devices
-        assert!(!state
-            .check_permission("user", ResourceType::Devices, Action::Delete)
-            .await);
+        assert!(
+            !state
+                .check_permission("user", ResourceType::Devices, Action::Delete)
+                .await
+        );
 
         // User cannot access users resource
-        assert!(!state
-            .check_permission("user", ResourceType::Users, Action::Read)
-            .await);
+        assert!(
+            !state
+                .check_permission("user", ResourceType::Users, Action::Read)
+                .await
+        );
     }
 
     #[tokio::test]
@@ -281,18 +294,24 @@ mod tests {
         let state = RbacState::new();
 
         // Device operator can read devices
-        assert!(state
-            .check_permission("device_operator", ResourceType::Devices, Action::Read)
-            .await);
+        assert!(
+            state
+                .check_permission("device_operator", ResourceType::Devices, Action::Read)
+                .await
+        );
 
         // Device operator cannot create devices
-        assert!(!state
-            .check_permission("device_operator", ResourceType::Devices, Action::Create)
-            .await);
+        assert!(
+            !state
+                .check_permission("device_operator", ResourceType::Devices, Action::Create)
+                .await
+        );
 
         // Device operator cannot delete deployments
-        assert!(!state
-            .check_permission("device_operator", ResourceType::Deployments, Action::Delete)
-            .await);
+        assert!(
+            !state
+                .check_permission("device_operator", ResourceType::Deployments, Action::Delete)
+                .await
+        );
     }
 }

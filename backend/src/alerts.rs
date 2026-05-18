@@ -599,7 +599,10 @@ mod tests {
     fn test_alert_source_serialization() {
         use super::AlertSource;
         let deployment = AlertSource::Deployment;
-        assert_eq!(serde_json::to_string(&deployment).unwrap(), "\"deployment\"");
+        assert_eq!(
+            serde_json::to_string(&deployment).unwrap(),
+            "\"deployment\""
+        );
 
         let device = AlertSource::Device;
         assert_eq!(serde_json::to_string(&device).unwrap(), "\"device\"");

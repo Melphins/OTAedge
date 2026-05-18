@@ -1442,7 +1442,10 @@ impl Repository {
             "open",
             device_id,
             deployment_id,
-            metadata.as_ref().map(|v| v).unwrap_or(&serde_json::json!(null)),
+            metadata
+                .as_ref()
+                .map(|v| v)
+                .unwrap_or(&serde_json::json!(null)),
         )
         .fetch_one(&self.pool)
         .await?;
@@ -1635,11 +1638,9 @@ impl Repository {
     }
 
     pub async fn get_all_online_devices(&self) -> Result<Vec<Device>, sqlx::Error> {
-        let rows = sqlx::query!(
-            "SELECT * FROM devices WHERE status = 'online'"
-        )
-        .fetch_all(&self.pool)
-        .await?;
+        let rows = sqlx::query!("SELECT * FROM devices WHERE status = 'online'")
+            .fetch_all(&self.pool)
+            .await?;
 
         Ok(rows
             .into_iter()
