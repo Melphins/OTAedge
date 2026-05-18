@@ -70,8 +70,8 @@ OTAedge solves this with:
 - Audit logs and compliance
 
 ### For Edge Devices
-- Lightweight Python agent (<50MB)
-- Automatic model download from S3
+- Lightweight Rust agent (<5MB)
+- Automatic model download from S3/MinIO
 - Atomic model switching (no downtime)
 - Checksum verification
 - Health monitoring
@@ -79,25 +79,6 @@ OTAedge solves this with:
 
 ---
 
-## Architecture
-
-```
-OTAedge Platform (cloud/on-prem)
-├── Rust backend (axum)
-├── PostgreSQL database
-├── MinIO/S3 storage
-├── Redis cache
-└── Next.js dashboard
-
-Edge Agent (on device)
-├── WebSocket connection
-├── Model download manager
-├── Model switcher
-├── Health monitor
-└── Inference runner
-```
-
----
 
 ## Supported Platforms
 
@@ -118,14 +99,15 @@ Edge Agent (on device)
 
 ### Prerequisites
 - Docker & Docker Compose
-- Python 3.10+ (for agent development)
+- Rust 1.70+ (for backend development)
+- Python 3.10+ (for agent scripting)
 - Node.js 18+ (for frontend development)
 
 ### Installation
 
 1. **Clone repository**
 ```bash
-git clone https://github.com/yourusername/OTAedge
+git clone https://github.com/Melphins/OTAedge.git
 cd OTAedge
 ```
 
@@ -156,24 +138,90 @@ curl -X POST http://localhost:8000/api/auth/register \
    - Frontend: http://localhost:3000
    - API docs: http://localhost:8000/docs
    - MinIO console: http://localhost:9001 (minioadmin/minioadmin)
+   - Prometheus: http://localhost:9090
+   - Grafana: http://localhost:3002 (admin/admin)
 
 ---
 
-## Installing Edge Agent
+## Backend Development
+
+```bash
+cd backend
+
+# Build and run with watch
+cargo watch -x run
+
+# Or manually
+cargo build --release
+cargo run
+```
+
+### Backend Features
+- RESTful API with OpenAPI/Swagger docs
+- WebSocket support for real-time device communication
+- Authentication with JWT
+- RBAC for multi-tenant organizations
+- File upload with multipart support
+- Prometheus metrics middleware
+
+---
+
+## Frontend Development
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+### Frontend Routes
+- `/` - Landing page
+- `/login` - User login
+- `/register` - Organization signup
+- `/dashboard` - Main dashboard with metrics
+- `/devices` - Device inventory and management
+- `/models` - Model registry
+- `/deployments` - Deployment history and status
+- `/alerts` - Alert configuration and history
+
+---
+
+## Edge Agent
+
+The agent is written in Rust for minimal footprint and maximum reliability.
+
+### Agent Development
+
+```bash
+cd agent
+
+# Build and run
+cargo run
+```
+
+### Installing Edge Agent
 
 On each edge device (Raspberry Pi, Jetson, etc.):
 
 ```bash
 # Download installation script
-curl -O https://your-server.com/agent/install.sh
+curl -O https://melphins.com/agent/install.sh  (later :) )
 
 # Run installation
-sudo bash install.sh --server http://your-server.com --token <registration_token>
+sudo bash install.sh --server http://melphins.com --token <registration_token>
 
 # Or manual installation
-git clone https://github.com/yourusername/OTAedge
+git clone https://github.com/Melphins/OTAedge.git
 cd OTAedge/agent
-pip install -r requirements.txt
+cargo build --release
+sudo cp target/release/agent /usr/local/bin/
 sudo cp install/otaedge.service /etc/systemd/system/
 sudo systemctl enable otaedge
 sudo systemctl start otaedge
@@ -182,102 +230,32 @@ sudo systemctl start otaedge
 The agent will:
 1. Register with the platform
 2. Send heartbeat every 30 seconds
-3. Listen for deployment commands
+3. Listen for deployment commands via WebSocket
 4. Download and switch models as instructed
 
 ---
 
-## Documentation
-
-- **[Validation Plan](plans/03-validation-customer-discovery.md)** - How to validate this problem before building
-- **[Technical Implementation Plan](plans/01-technical-mvp-implementation.md)** - 12-week build roadmap
-- **[Go-to-Market Strategy](plans/02-go-to-market-strategy.md)** - How to acquire first 50 customers
-
-See [docs/](docs/) for additional documentation.
-
----
-
-## Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-### Development Setup
+### Development Workflow
 
 ```bash
-# Backend
-cd backend
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+# Run tests
+cargo test --workspace
 
-# Frontend
-cd frontend
-npm install
-npm run dev
+# Run migrations
+cargo sqlx migrate run
 
-# Agent
-cd agent
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python main.py
+# Check formatting
+cargo fmt --check
+
+# Lint code
+cargo clippy -- -D warnings
 ```
-
----
-
-## Roadmap
-
-**MVP (12 weeks)**:
-- Raspberry Pi + TensorFlow Lite support
-- Basic deployment (all-at-once)
-- Manual rollback
-- Simple metrics
-
-**v1.0 (Month 4-6)**:
-- Phased rollouts (10% → 100%)
-- ONNX support
-- A/B testing
-- Advanced metrics and alerts
-
-**v2.0 (Month 7-12)**:
-- Rust agent (smaller, faster)
-- Enterprise features (SSO, audit logs)
-- Compliance certifications (SOC2, HIPAA)
-- Marketplace for pre-trained models
 
 ---
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
-
----
-
-## Support
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/OTAedge/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/OTAedge/discussions)
-- **Email**: support@otaedge.com
-- **Slack**: [Join our community](https://otaedge.com/slack)
-
----
-
-## Acknowledgments
-
-Built with:
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [Next.js](https://nextjs.org/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [TensorFlow Lite](https://www.tensorflow.org/lite)
-
----
-
-## Star History
-
-If this project helps you, please give us a ⭐!
-
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/OTAedge&type=Date)](https://star-history.com/#yourusername/OTAedge&Date)
 
 ---
 
